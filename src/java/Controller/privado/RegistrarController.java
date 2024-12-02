@@ -31,7 +31,7 @@ public class RegistrarController extends HttpServlet {
                 rd.forward(request, response);
                 break;
             case "admin":
-                rd = request.getRequestDispatcher("/Views/registro/adminReg.jsp"); 
+                rd = request.getRequestDispatcher("/Views/list.jsp"); 
                 rd.forward(request, response);
                 break;
             case "disc":

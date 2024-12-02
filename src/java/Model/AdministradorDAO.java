@@ -41,6 +41,7 @@ public class AdministradorDAO {
                     Administrador.setCpf(resultado.getString("CPF"));
                     Administrador.setEndereco(resultado.getString("ENDERECO"));
                     Administrador.setSenha(resultado.getString("SENHA"));
+                    Administrador.setAprovado(resultado.getString("APROVADO"));
                 }
             }
             return Administrador;
@@ -55,26 +56,28 @@ public class AdministradorDAO {
     public void Alterar(Administrador Administrador) throws Exception {
         Conexao conexao = new Conexao();
         try {
-            PreparedStatement sql = conexao.getConexao().prepareStatement("UPDATE Administrador SET nome = ?, cpf = ?, endereco = ?, senha = ?  WHERE ID = ? ");
+            PreparedStatement sql = conexao.getConexao().prepareStatement("UPDATE Administrador SET nome = ?, cpf = ?, endereco = ?, senha = ?, aprovado = ?  WHERE ID = ? ");
             sql.setString(1, Administrador.getNome());
             sql.setString(2, Administrador.getCpf());
             sql.setString(3, Administrador.getEndereco());
             sql.setString(4, Administrador.getSenha());
-            sql.setInt(5, Administrador.getId());
+            sql.setString(5, Administrador.getAprovado());
+            sql.setInt(6, Administrador.getId());
+            System.out.println(Administrador.getAprovado());
             sql.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException("Query de update (alterar) incorreta");
+            throw new RuntimeException("Erro ao atualizar o administrador: " + e.getMessage(), e);
         } finally {
             conexao.closeConexao();
         }
     }
 
-    public void Excluir(Administrador Administrador) throws Exception {
+    public void Excluir(int id) throws Exception {
         Conexao conexao = new Conexao();
         try {
             PreparedStatement sql = conexao.getConexao().prepareStatement("DELETE FROM Administrador WHERE ID = ? ");
-            sql.setInt(1, Administrador.getId());
+            sql.setInt(1, id);
             sql.executeUpdate();
 
         } catch (SQLException e) {
@@ -94,12 +97,14 @@ public class AdministradorDAO {
             ResultSet resultado = preparedStatement.executeQuery();
             if (resultado != null) {
                 while (resultado.next()) {
-                    Administrador Administrador = new Administrador(resultado.getString("NOME"),
-                            resultado.getString("CPF"),
-                            resultado.getString("ENDERECO"),
-                            resultado.getString("SENHA"));
-                    Administrador.setId(Integer.parseInt(resultado.getString("id")));
+                    Administrador Administrador = new Administrador();
+                    Administrador.setNome(resultado.getString("NOME"));
+                    Administrador.setCpf(resultado.getString("CPF"));
+                    Administrador.setSenha(resultado.getString("SENHA"));
+                    Administrador.setEndereco(resultado.getString("ENDERECO"));
                     Administrador.setAprovado(resultado.getString("aprovado"));
+                    Administrador.setId(Integer.parseInt(resultado.getString("id")));
+                    
                     meusAdministradores.add(Administrador);
                 }
             }
@@ -126,9 +131,6 @@ public class AdministradorDAO {
                     AdministradorObtido.setEndereco(resultado.getString("ENDERECO"));
                     AdministradorObtido.setAprovado(resultado.getString("APROVADO"));
                     AdministradorObtido.setSenha(resultado.getString("SENHA"));
-            }
-            else {
-                return null;
             }
             return AdministradorObtido;
 

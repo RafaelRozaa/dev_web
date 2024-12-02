@@ -10,7 +10,7 @@
     <body>
         <%
             String login = (String) request.getParameter("login");
-            String msgError = (String) request.getParameter("msgError");
+            String msgError = (String) request.getAttribute("msgError");
         %>
         <section class="container d-flex justify-content-center align-items-center vh-100">
             <div class="card p-4 shadow" style="width: 100%; max-width: 400px;">
