@@ -41,62 +41,62 @@ public class AutenticaController extends HttpServlet {
             rd.forward(request, response);
         } else {
             switch (login) {
-                case "admin":
-                Administrador administradorObtido = new Administrador();
-                Administrador admin = new Administrador(cpf_user, senha_user);
-                AdministradorDAO adminDAO = new AdministradorDAO();
-                try {
-                    administradorObtido = adminDAO.Logar(admin);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println(cpf_user);
-                    System.out.println(senha_user);
-                    throw new RuntimeException("Falha na query para Logar");
-                }
-
-                if (administradorObtido.getId() != 0 && "y".equals(administradorObtido.getAprovado())) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("administrador", administradorObtido);
+                case "admin" -> {
+                    Administrador administradorObtido = new Administrador();
+                    Administrador admin = new Administrador(cpf_user, senha_user);
+                    AdministradorDAO adminDAO = new AdministradorDAO();
+                    try {
+                        administradorObtido = adminDAO.Logar(admin);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                        System.out.println(cpf_user);
+                        System.out.println(senha_user);
+                        throw new RuntimeException("Falha na query para Logar");
+                    }
+                    
+                    if (administradorObtido.getId() != 0 && "y".equals(administradorObtido.getAprovado())) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("administrador", administradorObtido);
                         session.setAttribute("administrador", administradorObtido);
                         session.setAttribute("usuarioTipo", "administrador");
                         rd = request.getRequestDispatcher("/Views/privado/admin/adminDashboard.jsp");
-                } else {
-                    request.setAttribute("msgError", "CPF e/ou senha incorreto");
-                    rd = request.getRequestDispatcher("/Views/autenticacao/formLogin.jsp");
-                }
+                    } else {
+                        request.setAttribute("msgError", "CPF e/ou senha incorreto");
+                        rd = request.getRequestDispatcher("/Views/autenticacao/formLogin.jsp");
+                    }
                     rd.forward(request, response);
-                    break;
-                    
-                case "prof":
-                    // Implementação para "prof"
-                    break;
-                    
-                case "aluno":
-                Aluno alunoObtido = new Aluno();
-                Aluno aluno = new Aluno(cpf_user, senha_user);
-                AlunoDAO alunoDAO = new AlunoDAO();
-                try {
-                    alunoObtido = alunoDAO.Logar(aluno);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println(cpf_user);
-                    System.out.println(senha_user);
-                    throw new RuntimeException("Falha na query para Logar");
                 }
-
-                if (alunoObtido.getId() != 0) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("aluno", alunoObtido);
+                    
+                case "prof" -> {
+                }
+                    
+                case "aluno" -> {
+                    Aluno alunoObtido = new Aluno();
+                    Aluno aluno = new Aluno(cpf_user, senha_user);
+                    AlunoDAO alunoDAO = new AlunoDAO();
+                    try {
+                        alunoObtido = alunoDAO.Logar(aluno);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getMessage());
+                        System.out.println(cpf_user);
+                        System.out.println(senha_user);
+                        throw new RuntimeException("Falha na query para Logar");
+                    }
+                    
+                    if (alunoObtido.getId() != 0) {
+                        HttpSession session = request.getSession();
+                        session.setAttribute("aluno", alunoObtido);
                         session.setAttribute("aluno", alunoObtido);
                         session.setAttribute("usuarioTipo", "aluno");
                         rd = request.getRequestDispatcher("/Views/privado/aluno/alunoDashboard.jsp");
-                } else {
-                    request.setAttribute("msgError", "CPF e/ou senha incorreto");
-                    rd = request.getRequestDispatcher("/Views/autenticacao/formLogin.jsp");
-                }
+                    } else {
+                        request.setAttribute("msgError", "CPF e/ou senha incorreto");
+                        rd = request.getRequestDispatcher("/Views/autenticacao/formLogin.jsp");
+                    }
                     rd.forward(request, response);
-                    break;
+                }
             }
-        }
+            // Implementação para "prof"
+                    }
     }
 }

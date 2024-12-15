@@ -1,10 +1,14 @@
 package Entidade;
 
 public class Turmas {
+
     private int id;
     private int professor_id;
     private int disciplina_id;
     private int aluno_id;
+    private String nome_professor;
+    private String nome_disciplina;
+    private String nome_aluno;
     private String codigo_turma;
     private Float nota;
 
@@ -23,7 +27,31 @@ public class Turmas {
     public void setId(int id) {
         this.id = id;
     }
-
+    
+    public String getNome_Professor() {
+        return nome_professor;
+    }
+    
+    public void setNome_Professor(String nome_professor) {
+        this.nome_professor = nome_professor;
+    }
+    
+    public String getNome_Disciplina() {
+        return nome_disciplina;
+    }
+    
+    public void setNome_Disciplina(String nome_disciplina) {
+        this.nome_disciplina = nome_disciplina;
+    }
+        
+    public String getNome_Aluno() {
+        return nome_aluno;
+    }
+    
+    public void setNome_Aluno(String nome_aluno) {
+        this.nome_aluno = nome_aluno;
+    }
+    
     public int getProfessor_id() {
         return professor_id;
     }
@@ -63,7 +91,5 @@ public class Turmas {
     public void setNota(Float nota) {
         this.nota = nota;
     }
-    
-    
-    
+
 }
