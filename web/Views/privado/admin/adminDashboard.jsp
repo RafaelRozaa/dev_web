@@ -21,7 +21,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Alunos</h5>
                         <p class="card-text">Consulte, inclua, altere e exclua alunos do sistema.</p>
-                        <a href="/privado/RegistrarController?registro=aluno" class="btn btn-primary">Entrar</a>
+                        <a href="/Escola/privado/AlunoController?action=listar" class="btn btn-primary">Entrar</a>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Professores</h5>
                         <p class="card-text">Consulte, inclua, altere e exclua professores do sistema.</p>
-                        <a href="/privado/RegistrarController?registro=prof" class="btn btn-primary">Entrar</a>
+                        <a href="/Escola/privado/ProfessorController?action=listar" class="btn btn-primary">Entrar</a>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Turmas</h5>
                         <p class="card-text">Consulte, inclua, altere e exclua turmas do sistema.</p>
-                        <a href="/privado/RegistrarController?registro=turma" class="btn btn-primary">Entrar</a>
+                        <a href="/Escola/privado/TurmasController?action=listar" class="btn btn-primary">Entrar</a>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Disciplina</h5>
                         <p class="card-text">Consulte, inclua, altere e exclua disciplinas do sistema.</p>
-                        <a href="/privado/RegistrarController?registro=disc" class="btn btn-primary">Entrar</a>
+                        <a href="/Escola/privado/DisciplinaController?action=listar" class="btn btn-primary">Entrar</a>
                     </div>
                 </div>
             </div>

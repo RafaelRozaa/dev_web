@@ -53,7 +53,7 @@
                         <!-- Nome -->
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome</label>
-                            <input type="text" name="nome" id="nome" value="<%= admin.getNome() %>" 
+                            <input type="text" name="nome" id="nome" required  
                                 class="form-control" 
                                 <%= "excluir".equals(action) ? "readonly" : "" %>>
                         </div>
@@ -61,7 +61,7 @@
                         <!-- CPF -->
                         <div class="mb-3">
                             <label for="cpf" class="form-label">CPF</label>
-                            <input type="text" name="cpf" id="cpf" value="<%= admin.getCpf() %>" 
+                            <input type="text" name="cpf" id="cpf" required" 
                                 class="form-control"
                                 <%= "excluir".equals(action) ? "readonly" : "" %>>
                         </div>
@@ -69,7 +69,7 @@
                         <!-- Endereço -->
                         <div class="mb-3">
                             <label for="endereco" class="form-label">Endereço</label>
-                            <input type="text" name="endereco" id="endereco" value="<%= admin.getEndereco() %>" 
+                            <input type="text" name="endereco" id="endereco" required" 
                                 class="form-control"
                                 <%= "excluir".equals(action) ? "readonly" : "" %>>
                         </div>
@@ -77,7 +77,7 @@
                         <!-- Senha -->
                         <div class="mb-3">
                             <label for="senha" class="form-label">Senha</label>
-                            <input type="password" name="senha" id="senha" value="<%= admin.getSenha() %>" 
+                            <input type="password" name="senha" id="senha" required" 
                                 class="form-control"
                                 <%= "excluir".equals(action) ? "readonly" : "" %>>
                         </div>
