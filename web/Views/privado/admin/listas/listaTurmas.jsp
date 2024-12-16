@@ -40,12 +40,12 @@
                 %>
                 <tr>
                     <td><%= turma.getCodigo_turma() %></td>
-                    <td><%= turma.getProfessor_id() %></td>
-                    <td><%= turma.getNome_Professor() %></td>
-                    <td><%= turma.getDisciplina_id() %></td>
-                    <td><%= turma.getNome_Disciplina() %></td>
-                    <td><%= turma.getAluno_id() %></td>
-                    <td><%= turma.getNome_Aluno() %></td>
+                    <td><%= turma.getProfessor().getId() %></td>
+                    <td><%= turma.getProfessor().getNome() %></td>
+                    <td><%= turma.getDisciplina().getId() %></td>
+                    <td><%= turma.getDisciplina().getNome() %></td>
+                    <td><%= turma.getAluno().getId() %></td>
+                    <td><%= turma.getAluno().getNome() %></td>
                     <td><%= turma.getNota() %></td>
                     <td>
                         <!-- Botão de editar -->

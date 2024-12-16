@@ -35,7 +35,6 @@ public class DisciplinaController extends HttpServlet {
                     int id = Integer.parseInt(request.getParameter("id"));
                     request.setAttribute("disciplina", dao.getDisciplina(id));
                     request.setAttribute("action", action);
-                    
                     rd = request.getRequestDispatcher("/Views/privado/admin/forms/formDisciplina.jsp");
                     rd.forward(request, response);
                     break;

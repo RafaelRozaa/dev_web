@@ -1,8 +1,16 @@
 package Controller.privado;
 
 import Entidade.Turmas;
+import Entidade.Professor;
+import Model.ProfessorDAO;
+import Entidade.Disciplina;
+import Model.DisciplinaDAO;
+import Entidade.Aluno;
+import Model.AlunoDAO;
 import Model.TurmasDAO;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -60,17 +68,83 @@ public class TurmasController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String btEnviar = request.getParameter("btEnviar");
-        Turmas turma = new Turmas(0, 0, 0, null, null);
-        turma.setId(Integer.parseInt(request.getParameter("id")));
-        turma.setProfessor_id(Integer.parseInt(request.getParameter("professor_id")));
-        turma.setDisciplina_id(Integer.parseInt(request.getParameter("disciplina_id")));
-        turma.setAluno_id(Integer.parseInt(request.getParameter("aluno_id")));
-        turma.setCodigo_turma(request.getParameter("codigo_turma"));
-        turma.setNota(Float.parseFloat(request.getParameter("nota")));
 
-        TurmasDAO dao = new TurmasDAO();
         RequestDispatcher rd;
+
+        String btEnviar = request.getParameter("btEnviar");
+
+        Turmas turma = new Turmas();
+
+        String action = request.getParameter("action");
+
+        turma.setId(Integer.parseInt(request.getParameter("id")));
+        
+        if ("listar".equals(action) || "incluir".equals(action)) {
+            Professor professor = new Professor();
+            Aluno aluno = new Aluno();
+            Disciplina disciplina = new Disciplina();
+            professor.setId(Integer.parseInt(request.getParameter("professor_id")));
+            turma.setProfessor(professor);
+
+            disciplina.setId(Integer.parseInt(request.getParameter("disciplina_id")));
+            turma.setDisciplina(disciplina);
+            if (!request.getParameter("aluno_id").isEmpty()) {
+                aluno.setId(Integer.parseInt(request.getParameter("aluno_id")));
+                turma.setAluno(aluno);
+            }
+
+            turma.setCodigo_turma(request.getParameter("codigo_turma"));
+            turma.setNota(Float.parseFloat(request.getParameter("nota")));
+
+            ProfessorDAO professorDao = new ProfessorDAO();
+            Professor professorObtido = new Professor();
+
+            try {
+                professorObtido = professorDao.getProfessor(professor.getId());
+            } catch (Exception ex) {
+                Logger.getLogger(TurmasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (professorObtido.getId() == 0) {
+                request.setAttribute("msgError", "Professor não existe");
+                request.setAttribute("action", action);
+                rd = request.getRequestDispatcher("/Views/privado/admin/forms/formTurmas.jsp");
+                rd.forward(request, response);
+            }
+
+            DisciplinaDAO disciplinaDao = new DisciplinaDAO();
+            Disciplina disciplinaObtido = new Disciplina();
+
+            try {
+                disciplinaObtido = disciplinaDao.getDisciplina(disciplina.getId());
+            } catch (Exception ex) {
+                Logger.getLogger(TurmasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (disciplinaObtido.getId() == 0) {
+                request.setAttribute("msgError", "Disciplina não existe");
+                request.setAttribute("action", action);
+                rd = request.getRequestDispatcher("/Views/privado/admin/forms/formTurmas.jsp");
+                rd.forward(request, response);
+            }
+
+            AlunoDAO alunoDao = new AlunoDAO();
+            Aluno alunoObtido = new Aluno();
+
+            try {
+                alunoObtido = alunoDao.getAluno(aluno.getId());
+            } catch (Exception ex) {
+                Logger.getLogger(TurmasController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            if (alunoObtido.getId() == 0) {
+                request.setAttribute("msgError", "Aluno não existe");
+                request.setAttribute("action", action);
+                rd = request.getRequestDispatcher("/Views/privado/admin/forms/formTurmas.jsp");
+                rd.forward(request, response);
+            }
+        }
+        TurmasDAO dao = new TurmasDAO();
 
         try {
             switch (btEnviar) {
