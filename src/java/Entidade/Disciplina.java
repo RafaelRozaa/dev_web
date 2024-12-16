@@ -15,7 +15,19 @@ public class Disciplina {
         this.ementa = ementa;
         this.carga_horaria = carga_horaria;
     }
-
+    
+    public Disciplina(int id) {
+        this.id = id;
+    }
+    
+    public Disciplina() {
+        this.id = 0;
+        this.nome = "";
+        this.requisito = "";
+        this.ementa = "";
+        this.carga_horaria = 0;
+    }
+    
     public int getId() {
         return id;
     }
@@ -54,7 +66,5 @@ public class Disciplina {
 
     public void setCarga_horaria(int carga_horaria) {
         this.carga_horaria = carga_horaria;
-    }
-    
-    
+    }    
 }

@@ -54,7 +54,8 @@
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome</label>
                             <input type="text" name="nome" id="nome" required
-                                class="form-control" 
+                                class="form-control"
+                                value=<%= "excluir".equals(action) || "alterar".equals(action) ? disciplina.getNome()  : ""%>
                                 <%= "excluir".equals(action) ? "readonly" : "" %> >
                         </div>
 
@@ -62,7 +63,8 @@
                         <div class="mb-3">
                             <label for="requisito" class="form-label">Requisito</label>
                             <input type="text" name="requisito" id="requisito" required
-                                class="form-control" 
+                                class="form-control"
+                                value=<%= "excluir".equals(action) || "alterar".equals(action) ? disciplina.getRequisito()  : ""%>
                                 <%= "excluir".equals(action) ? "readonly" : "" %> >
                         </div>
 
@@ -70,7 +72,8 @@
                         <div class="mb-3">
                             <label for="ementa" class="form-label">Ementa</label>
                             <input type="text" name="ementa" id="ementa" required
-                                class="form-control" 
+                                class="form-control"
+                                value=<%= "excluir".equals(action) || "alterar".equals(action) ? disciplina.getEmenta()  : ""%>
                                 <%= "excluir".equals(action) ? "readonly" : "" %> >
                         </div>
 
@@ -78,7 +81,8 @@
                         <div class="mb-3">
                             <label for="carga_horaria" class="form-label">Carga Horária</label>
                             <input type="number" name="carga_horaria" id="carga_horaria" required
-                                class="form-control" 
+                                class="form-control"
+                                value=<%= "excluir".equals(action) || "alterar".equals(action) ? disciplina.getCarga_horaria()  : ""%>
                                 <%= "excluir".equals(action) ? "readonly" : "" %> >
                         </div>
 

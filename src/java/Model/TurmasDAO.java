@@ -1,6 +1,9 @@
 package Model;
 
 import java.sql.PreparedStatement;
+import Entidade.Aluno;
+import Entidade.Disciplina;
+import Entidade.Professor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,11 +13,12 @@ public class TurmasDAO {
 
     public void Inserir(Turmas turma) throws Exception {
         Conexao conexao = new Conexao();
+        
         try {
             PreparedStatement sql = conexao.getConexao().prepareStatement("INSERT INTO Turmas (professor_id, disciplina_id, aluno_id, codigo_turma, nota) VALUES (?, ?, ?, ?, ?)");
-            sql.setInt(1, turma.getProfessor_id());
-            sql.setInt(2, turma.getDisciplina_id());
-            sql.setInt(3, turma.getAluno_id());
+            sql.setInt(1, turma.getProfessor().getId());
+            sql.setInt(2, turma.getDisciplina().getId());
+            sql.setInt(3, turma.getAluno().getId());
             sql.setString(4, turma.getCodigo_turma());
             sql.setFloat(5, turma.getNota());
             sql.executeUpdate();
@@ -28,16 +32,19 @@ public class TurmasDAO {
     public Turmas getTurma(int id) throws Exception {
         Conexao conexao = new Conexao();
         try {
-            Turmas turma = new Turmas(0, 0, 0, null, null);
+            Turmas turma = new Turmas();
             PreparedStatement sql = conexao.getConexao().prepareStatement("SELECT * FROM Turmas WHERE ID = ?");
             sql.setInt(1, id);
             ResultSet resultado = sql.executeQuery();
             if (resultado.next()) {
                 turma.setId(resultado.getInt("ID"));
-                turma.setProfessor_id(resultado.getInt("PROFESSOR_ID"));
-                turma.setDisciplina_id(resultado.getInt("DISCIPLINA_ID"));
-                turma.setAluno_id(resultado.getInt("ALUNO_ID"));
-                turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
+                Professor professor = new Professor(resultado.getInt("PROFESSOR_ID"));
+                turma.setProfessor(professor);
+                Aluno aluno = new Aluno(resultado.getInt("ALUNO_ID"));
+                turma.setAluno(aluno);
+                Disciplina disciplina = new Disciplina(resultado.getInt("DISCIPLINA_ID"));
+                turma.setDisciplina(disciplina);
+                turma.setCodigo_turma(resultado.getString("DISCIPLINA_ID"));
                 turma.setNota(resultado.getFloat("NOTA"));
             }
             return turma;
@@ -52,9 +59,9 @@ public class TurmasDAO {
         Conexao conexao = new Conexao();
         try {
             PreparedStatement sql = conexao.getConexao().prepareStatement("UPDATE Turmas SET professor_id = ?, disciplina_id = ?, aluno_id = ?, codigo_turma = ?, nota = ? WHERE ID = ?");
-            sql.setInt(1, turma.getProfessor_id());
-            sql.setInt(2, turma.getDisciplina_id());
-            sql.setInt(3, turma.getAluno_id());
+            sql.setInt(1, turma.getProfessor().getId());
+            sql.setInt(2, turma.getDisciplina().getId());
+            sql.setInt(3, turma.getAluno().getId());
             sql.setString(4, turma.getCodigo_turma());
             sql.setFloat(5, turma.getNota());
             sql.setInt(6, turma.getId());
@@ -87,16 +94,22 @@ public class TurmasDAO {
             PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL);
             ResultSet resultado = preparedStatement.executeQuery();
             while (resultado.next()) {
-                Turmas turma = new Turmas(0, 0, 0, null, null);
+                Turmas turma = new Turmas();
+                Aluno aluno = new Aluno();
+                Disciplina disciplina = new Disciplina();
                 turma.setId(resultado.getInt("ID"));
-                turma.setProfessor_id(resultado.getInt("PROFESSOR_ID"));
-                turma.setDisciplina_id(resultado.getInt("DISCIPLINA_ID"));
-                turma.setAluno_id(resultado.getInt("ALUNO_ID"));
+                Professor professor = new Professor();
                 turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
                 turma.setNota(resultado.getFloat("NOTA"));
-                turma.setNome_Aluno(resultado.getString("NOME_ALUNO"));
-                turma.setNome_Disciplina(resultado.getString("NOME_DISCIPLINA"));
-                turma.setNome_Professor(resultado.getString("NOME_PROFESSOR"));
+                aluno.setId(resultado.getInt("ALUNO_ID"));
+                disciplina.setId(resultado.getInt("DISCIPLINA_ID"));
+                professor.setId(resultado.getInt("PROFESSOR_ID"));
+                aluno.setNome(resultado.getString("NOME_ALUNO"));
+                disciplina.setNome(resultado.getString("NOME_DISCIPLINA"));
+                professor.setNome(resultado.getString("NOME_PROFESSOR"));
+                turma.setProfessor(professor);
+                turma.setDisciplina(disciplina);
+                turma.setAluno(aluno);
                 turmas.add(turma);
             }
         } catch (SQLException e) {

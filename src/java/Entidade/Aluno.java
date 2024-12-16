@@ -24,6 +24,10 @@ public class Aluno {
         this.cep = cep;
     }
     
+    public Aluno(int id) {
+        this.id = id;
+    }
+    
     public Aluno(String cpf, String senha) {
         this.cpf = cpf;
         this.senha = senha;

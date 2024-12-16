@@ -11,6 +11,18 @@ public class Professor {
     private String cpf;
     private String senha;
 
+    public Professor(int id){
+        this.id = id;
+    }
+    
+    public Professor() {
+        this.id = 0;
+        this.nome = "";
+        this.email = "";
+        this.cpf = "";
+        this.senha = "";
+    }
+    
     public Professor(String nome, String email, String cpf, String senha) {
         this.nome = nome;
         this.email = email;

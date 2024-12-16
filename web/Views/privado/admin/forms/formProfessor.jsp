@@ -53,6 +53,7 @@
                         <label for="nome" class="form-label">Nome</label>
                         <input type="text" name="nome" id="nome" required
                             class="form-control" 
+                             value=<%= "excluir".equals(action) || "alterar".equals(action) ? professor.getNome() : ""%>
                             <%= "excluir".equals(action) ? "readonly" : "" %>>
                     </div>
 
@@ -61,6 +62,7 @@
                         <label for="email" class="form-label">Email</label>
                         <input type="email" name="email" id="email" required
                             class="form-control"
+                            value=<%= "excluir".equals(action) || "alterar".equals(action) ? professor.getEmail() : ""%>
                             <%= "excluir".equals(action) ? "readonly" : "" %>>
                     </div>
 
@@ -69,6 +71,7 @@
                         <label for="cpf" class="form-label">CPF</label>
                         <input type="text" name="cpf" id="cpf" required
                             class="form-control"
+                            value=<%= "excluir".equals(action) || "alterar".equals(action) ? professor.getCpf()  : ""%>
                             <%= "excluir".equals(action) ? "readonly" : "" %>>
                     </div>
 
