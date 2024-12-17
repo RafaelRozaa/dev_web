@@ -55,6 +55,12 @@ public class TurmasController extends HttpServlet {
                     rd = request.getRequestDispatcher("/Views/privado/admin/forms/formTurmas.jsp");
                     rd.forward(request, response);
                     break;
+                case "relatorio":
+                    request.setAttribute("turmasPorCod", dao.TurmasPorCod());
+                    request.setAttribute("action", action);
+                    rd = request.getRequestDispatcher("/Views/privado/admin/listas/listaRelatorios.jsp");
+                    rd.forward(request, response);
+                    break;
                 default:
                     response.sendRedirect("TurmasController?action=listar");
                     break;
@@ -160,6 +166,12 @@ public class TurmasController extends HttpServlet {
                     dao.Excluir(turma.getId());
                     request.setAttribute("msgOperacaoRealizada", "Exclusão realizada com sucesso");
                     break;
+                case "relatar":
+                    turma.setCodigo_turma(request.getParameter("codigo_turma"));
+                    request.setAttribute("relatorio",dao.TurmaRelatorio(turma.getCodigo_turma()));
+                    rd = request.getRequestDispatcher("/Views/privado/admin/relatorio.jsp");
+                    rd.forward(request, response);
+                    break;                    
             }
 
             request.setAttribute("link", "TurmasController?action=listar");
