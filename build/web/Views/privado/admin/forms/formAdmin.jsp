@@ -55,7 +55,7 @@
                             <label for="nome" class="form-label">Nome</label>
                             <input type="text" name="nome" id="nome" required  
                                    class="form-control"
-                                   value=<%= "excluir".equals(action) || "alterar".equals(action) ? admin.getNome() : ""%>
+                                   value='<%= "excluir".equals(action) || "alterar".equals(action) ? admin.getNome() : ""%>'
                                    <%= "excluir".equals(action) ? "readonly" : ""%>>
                         </div>
 
@@ -73,7 +73,7 @@
                             <label for="endereco" class="form-label">Endereço</label>
                             <input type="text" name="endereco" id="endereco" required" 
                                    class="form-control"
-                                    value=<%= "excluir".equals(action) || "alterar".equals(action) ? admin.getEndereco(): ""%>
+                                    value='<%= "excluir".equals(action) || "alterar".equals(action) ? admin.getEndereco(): ""%>'
                                    <%= "excluir".equals(action) ? "readonly" : ""%>>
                         </div>
 
