@@ -46,6 +46,7 @@ public class AutenticaController extends HttpServlet {
                     Administrador admin = new Administrador(cpf_user, senha_user);
                     AdministradorDAO adminDAO = new AdministradorDAO();
                     try {
+                        adminDAO.criarAdminDefault();
                         administradorObtido = adminDAO.Logar(admin);
                     } catch (Exception ex) {
                         System.out.println(ex.getMessage());

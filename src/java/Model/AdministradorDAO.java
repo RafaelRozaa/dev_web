@@ -141,4 +141,37 @@ public class AdministradorDAO {
             conexao.closeConexao();
         }
     }
+    
+    public void criarAdminDefault() throws Exception {
+        Conexao conexao = new Conexao();
+        try {
+            // Verifica se o administrador já existe
+            String queryCheck = "SELECT COUNT(*) AS total FROM administrador WHERE cpf = ?";
+            PreparedStatement checkStmt = conexao.getConexao().prepareStatement(queryCheck);
+            checkStmt.setString(1, "249.252.810-38"); // CPF do administrador padrão
+            ResultSet rs = checkStmt.executeQuery();
+            rs.next();
+            
+            if (rs.getInt("total") == 0) {
+                String queryInsert = "INSERT INTO administrador (nome, cpf, senha, aprovado, endereco) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement insertStmt = conexao.getConexao().prepareStatement(queryInsert);
+                insertStmt.setString(1, "Leonardo");
+                insertStmt.setString(2, "249.252.810-38");
+                insertStmt.setString(3, "111");
+                insertStmt.setString(4, "y");
+                insertStmt.setString(5, "Av. Gal. Milton Tavares de Souza, São Domingos, Niterói, RJ");
+                
+                
+                insertStmt.executeUpdate();
+                System.out.println("Administrador padrão cadastrado com sucesso.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao criar administrador padrão.", e);
+        } finally {
+            conexao.closeConexao();
+        }
+    }
+
+    
 }

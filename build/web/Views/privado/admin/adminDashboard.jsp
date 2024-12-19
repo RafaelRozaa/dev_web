@@ -13,7 +13,7 @@
     <jsp:include page="/Views/comum/menu.jsp" />
 
     <!-- Seção de Cards -->
-    <section class="container my-5">
+    <section class="container mt-4">
         <h2 class="text-center mb-4">Dashboard do Administrador</h2>
         <div class="row">
             <div class="col-md-4 mb-4">
@@ -55,6 +55,17 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Gerar Relatório</h5>
+                        <p class="card-text">Relatório sobre as disciplinas/turmas e a nota dos alunos inscritos em cada uma delas.</p>
+                        <a href="/Escola/privado/TurmasController?action=relatorio" class="btn btn-primary">Entrar</a>
+                    </div>
+                </div>
+            </div>
+            
 
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
