@@ -3,20 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/comum/showMessage.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/escola.sql</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/privado/admin/forms/formAdmin.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/privado/admin/forms/formDisciplina.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Model/AdministradorDAO.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/privado/admin/adminDashboard.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Controller/AutenticaController.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Entidade/Administrador.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/comum/menu.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Controller/privado/AdminController.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Entidade/Disciplina.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/web/Views/public/home.jsp</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Model/Conexao.java</file>
-            <file>file:/C:/Users/ferna/Desktop/dev_web/src/java/Controller/privado/DisciplinaController.java</file>
+            <file>file:/C:/Users/rafae/Documents/NetBeansProjects/Escola/src/java/Controller/privado/AdminController.java</file>
+            <file>file:/C:/Users/rafae/Documents/NetBeansProjects/Escola/web/Views/privado/admin/forms/formAdmin.jsp</file>
+            <file>file:/C:/Users/rafae/Documents/NetBeansProjects/Escola/src/java/Model/AdministradorDAO.java</file>
+            <file>file:/C:/Users/rafae/Documents/NetBeansProjects/Escola/web/Views/privado/admin/listas/listaAdmin.jsp</file>
         </group>
     </open-files>
 </project-private>

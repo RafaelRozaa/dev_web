@@ -1,6 +1,5 @@
 package Filtro;
 
-import Entidade.Administrador;
 import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,15 +16,16 @@ public class filtroRestrito implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException {
+                         FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        Administrador administrador = (Administrador)((HttpServletRequest) request).getSession().getAttribute("administrador");
+        Object usuarioLogado = httpRequest.getSession().getAttribute("usuario");
 
-        if ((administrador != null) && (!((String) administrador.getNome()).isEmpty())) {
+        if (usuarioLogado != null && !usuarioLogado.toString().trim().isEmpty()) {
             chain.doFilter(request, response);
         } else {
-            ((HttpServletResponse) response).sendRedirect("http://localhost:8080/Escola/home");
+            httpResponse.sendRedirect("http://localhost:8080/Escola/home");
         }
     }
     @Override

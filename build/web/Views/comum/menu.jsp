@@ -4,16 +4,14 @@
     String usuarioTipo = (String) session.getAttribute("usuarioTipo"); // "administrador", "aluno" ou "professor"
 %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid justify-content-start">
-        <a class="navbar-brand text-primary" href="/Escola/home">Home</a>
-        
+    <div class="container-fluid justify-content-start">        
         <!-- Adiciona o link Dashboard baseado no tipo de usuário -->
         <% if (usuarioTipo != null) { 
             switch (usuarioTipo) {
                 case "administrador":
         %>
                     <a
-                       class="nav-link text-primary" 
+                       class="navbar-brand text-primary" 
                        href="/Escola/Views/privado/admin/adminDashboard.jsp"
                     >
                         Dashboard Administrador
@@ -23,7 +21,7 @@
                 case "professor":
         %>
                     <a
-                       class="nav-link text-primary" 
+                       class="navbar-brand text-primary" 
                        href="/Escola/Views/privado/prof/profDashboard.jsp"
                     >
                         Dashboard Professor
@@ -33,7 +31,7 @@
                 case "aluno":
         %>
                     <a
-                       class="nav-link text-primary" 
+                       class="navbar-brand text-primary" 
                        href="/Escola/Views/privado/aluno/alunoDashboard.jsp"
                     >
                         Dashboard Aluno

@@ -19,13 +19,13 @@
                 <!-- CPF -->
                 <div class="form-group mb-3">
                     <label for="cpf">CPF</label>
-                    <input type="text" class="form-control" id="cpf" value='249.252.810-38' name="cpf" required placeholder="Digite seu CPF">
+                    <input type="text" class="form-control" id="cpf" value='<%="admin".equals(login)? "249.252.810-38" : "" %>' name="cpf" required placeholder="Digite seu CPF">
                 </div>
                 
                 <!-- Senha -->
                 <div class="form-group">
-                    <label for="senha" value='111'>Senha</label>
-                    <input type="password" class="form-control" value='111' id="senha" name="senha" required placeholder="Digite sua senha">
+                    <label for="senha">Senha</label>
+                    <input type="password" class="form-control" value='<%="admin".equals(login)? "111" : "" %>' id="senha" name="senha" required placeholder="Digite sua senha">
                 </div>
                 
                 <button type="submit" class="btn btn-primary btn-block mt-3">Entrar</button>
