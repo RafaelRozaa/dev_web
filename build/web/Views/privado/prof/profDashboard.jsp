@@ -1,46 +1,86 @@
+<%@page import="Entidade.Professor"%>
+<%@page import="Model.TurmasDAO"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="Entidade.Turmas"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Entidade.Professor"%>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
+    <title>Seleção de Turmas</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professor - Dashboard</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="http://localhost:8080/Escola/Views/bootstrap/bootstrap.min.css">
+    <script src="http://localhost:8080/Escola/Views/bootstrap/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <jsp:include page="/Views/comum/menu.jsp" />
 
-<!-- Seção de Cards -->
-<section class="container mt-4">
-    <h2 class="text-center mb-4">Dashboard do Professor</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm" style="min-height: 166px;">
-                <div class="card-body d-flex flex-column justify-content-center text-center">
-                    <h5 class="card-title">Lançar Notas</h5>
-                    <p class="card-text">Adicione e/ou edite as notas dos alunos de suas turmas</p>
-                    <a href="#" class="btn btn-primary align-self-center">Entrar</a>
-                </div>
-            </div>
-        </div>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Selecione uma Turma</h2>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm" style="min-height: 166px;">
-                <div class="card-body d-flex flex-column justify-content-center text-center">
-                    <h5 class="card-title">Listar Notas</h5>
-                    <p class="card-text">Consulte as notas dos alunos por disciplina/turma</p>
-                    <a href="#" class="btn btn-primary align-self-center">Entrar</a>
+        <%
+            int profId = (Integer) request.getAttribute("id");
+            Map<String, List<Turmas>> turmasAgrupadas = (Map<String, List<Turmas>>) request.getAttribute("turmasAgrupadas");
+        %>
+
+        <div class="accordion" id="accordionTurmas">
+            <%
+                for (Map.Entry<String, List<Turmas>> entry : turmasAgrupadas.entrySet()) {
+                    String codigoTurma = entry.getKey();
+                    List<Turmas> turmas = entry.getValue();
+            %>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-<%= codigoTurma %>">
+                    <div class="d-flex align-items-center">
+                        <!-- Botão Accordion -->
+                        <button class="accordion-button collapsed flex-grow-1 text-start me-3" type="button" 
+                                data-bs-toggle="collapse" data-bs-target="#collapse-<%= codigoTurma %>" 
+                                aria-expanded="false" aria-controls="collapse-<%= codigoTurma %>">
+                            Turma: <%= codigoTurma %>
+                        </button>
+
+                        <!-- Botão Adicionar Nota -->
+                        <a href="ProfessorController?action=adicionarNota&codigoTurma=<%= codigoTurma %>&id=<%= profId %>" 
+                           class="btn btn-success btn-sm">
+                            Adicionar Nota
+                        </a>
+                    </div>
+                </h2>
+                <div id="collapse-<%= codigoTurma %>" class="accordion-collapse collapse" aria-labelledby="heading-<%= codigoTurma %>" data-bs-parent="#accordionTurmas">
+                    <div class="accordion-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Nota</th>
+                                    <th>Disciplina</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (Turmas turma : turmas) {
+                                %>
+                                <tr>
+                                    <td><%= turma.getAluno().getNome() %></td>
+                                    <td><%= turma.getNota() %></td>
+                                    <td><%= turma.getDisciplina().getNome() %></td>
+                                    <td>
+                                    <a href="ProfessorController?action=editarNota&turmaId=<%= turma.getId()%>&codigoTurma=<%= codigoTurma %>&nota=<%= turma.getNota() %>&id=<%=profId%>" class="btn btn-primary btn-sm">Editar Nota</a>                                    </td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <%
+                }
+            %>
         </div>
     </div>
-</section>
-
-
-    <!-- Bootstrap JS -->
-    <script src="http://localhost:8080/Escola/Views/bootstrap/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

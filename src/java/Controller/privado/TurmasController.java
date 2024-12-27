@@ -85,7 +85,7 @@ public class TurmasController extends HttpServlet {
 
         turma.setId(Integer.parseInt(request.getParameter("id")));
         
-        if ("listar".equals(action) || "incluir".equals(action)) {
+        if ("listar".equals(action) || "incluir".equals(action)|| "alterar".equals(action)) {
             Professor professor = new Professor();
             Aluno aluno = new Aluno();
             Disciplina disciplina = new Disciplina();

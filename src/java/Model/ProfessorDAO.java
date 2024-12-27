@@ -107,7 +107,7 @@ public class ProfessorDAO {
             sql.setString(1, professor.getCpf());
             sql.setString(2, professor.getSenha());
             ResultSet resultado = sql.executeQuery();
-            Professor professorObtido = new Professor(null, null, null, null);
+            Professor professorObtido = new Professor();
             if (resultado.next()) {
                 professorObtido.setId(resultado.getInt("ID"));
                 professorObtido.setNome(resultado.getString("NOME"));

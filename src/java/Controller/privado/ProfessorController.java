@@ -1,8 +1,12 @@
 package Controller.privado;
 
 import Entidade.Professor;
+import Entidade.Turmas;
 import Model.ProfessorDAO;
+import Model.TurmasDAO;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +23,7 @@ public class ProfessorController extends HttpServlet {
         String action = request.getParameter("action");
         RequestDispatcher rd;
         ProfessorDAO dao = new ProfessorDAO();
+        TurmasDAO turmaDao = new TurmasDAO();
 
         try {
             switch (action) {
@@ -47,14 +52,37 @@ public class ProfessorController extends HttpServlet {
                     rd = request.getRequestDispatcher("/Views/privado/admin/forms/formProfessor.jsp");
                     rd.forward(request, response);
                     break;
-                default:
-                    System.out.println("passou aqui");
-                    response.sendRedirect("ProfessorController?action=listar");
+                case "adicionarNota":
+                    int profId = Integer.parseInt(request.getParameter("id"));
+                    Map<String, List<Turmas>> turmasAgrupadas = turmaDao.buscaTurmasAgrupadasPorCodigo(profId);
+                    request.setAttribute("turmasAgrupadas", turmasAgrupadas);
+                    request.setAttribute("codigoTurma", request.getParameter("codigoTurma"));
+                    request.setAttribute("id", request.getParameter("id"));
+                    rd = request.getRequestDispatcher("/Views/privado/prof/formNota.jsp");
+                    rd.forward(request, response);
+                    break;
+                case "editarNota":
+                    profId = Integer.parseInt(request.getParameter("id"));
+                    turmasAgrupadas = turmaDao.buscaTurmasAgrupadasPorCodigo(profId);
+                    request.setAttribute("turmasAgrupadas", turmasAgrupadas);
+                    request.setAttribute("turmaId", request.getParameter("turmaId"));
+                    request.setAttribute("codigoTurma", request.getParameter("codigoTurma"));
+                    request.setAttribute("id", request.getParameter("id"));
+                    request.setAttribute("nota", request.getParameter("nota"));
+                    rd = request.getRequestDispatcher("/Views/privado/prof/formNota.jsp");
+                    rd.forward(request, response);
+                    break;
+                case "dashboard":
+                    profId = Integer.parseInt(request.getParameter("id"));
+                    turmasAgrupadas = turmaDao.buscaTurmasAgrupadasPorCodigo(profId);
+                    request.setAttribute("turmasAgrupadas", turmasAgrupadas);
+                    request.setAttribute("id",profId);
+                    rd = request.getRequestDispatcher("/Views/privado/prof/profDashboard.jsp");
+                    rd.forward(request, response);
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("ProfessorController?action=listar");
         }
     }
 
@@ -70,6 +98,7 @@ public class ProfessorController extends HttpServlet {
         professor.setSenha(request.getParameter("senha"));
 
         ProfessorDAO dao = new ProfessorDAO();
+        TurmasDAO turmaDao = new TurmasDAO();
         RequestDispatcher rd;
 
         try {
@@ -85,6 +114,25 @@ public class ProfessorController extends HttpServlet {
                 case "excluir":
                     dao.Excluir(professor.getId());
                     request.setAttribute("msgOperacaoRealizada", "Exclusão realizada com sucesso");
+                    break;
+                case "criarNota":
+                    int alunoId = Integer.parseInt(request.getParameter("alunoId"));
+                    int disciplinaId = Integer.parseInt(request.getParameter("disciplinaId"));
+                    int professorId = Integer.parseInt(request.getParameter("id"));
+                    String codigoTurma = request.getParameter("codigoTurma");
+                    float nota = Float.parseFloat(request.getParameter("nota"));
+                    
+                    turmaDao.adicionarNota(alunoId, disciplinaId, professorId, codigoTurma, nota);
+                    
+                    response.sendRedirect("/Escola/privado/prof/profDashboard.jsp");
+                    break;
+                case "editarNota":
+                    // Lógica para editar nota existente
+                    int turmaId = Integer.parseInt(request.getParameter("turmaId"));
+                    float novaNota = Float.parseFloat(request.getParameter("nota"));
+                    // Atualizar nota no banco (implementar no DAO)
+                    turmaDao.editarNota(turmaId, novaNota);
+                    response.sendRedirect("/Escola/privado/prof/profDashboard.jsp");
                     break;
             }
 

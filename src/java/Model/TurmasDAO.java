@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Entidade.Turmas;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TurmasDAO {
 
@@ -44,7 +47,7 @@ public class TurmasDAO {
                 turma.setAluno(aluno);
                 Disciplina disciplina = new Disciplina(resultado.getInt("DISCIPLINA_ID"));
                 turma.setDisciplina(disciplina);
-                turma.setCodigo_turma(resultado.getString("DISCIPLINA_ID"));
+                turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
                 turma.setNota(resultado.getFloat("NOTA"));
             }
             return turma;
@@ -212,6 +215,148 @@ public class TurmasDAO {
             conexao.closeConexao();
         }
         return turmas;
+    }
+    
+    public ArrayList<Turmas> buscaTurmasPorProfessor(int professorId) {
+        ArrayList<Turmas> turmas = new ArrayList<>();
+        Conexao conexao = new Conexao();
+        
+        try {
+            String selectSQL = """
+                SELECT
+                    turmas.codigo_turma,  
+                    disciplina.nome as nome_disciplina 
+                FROM 
+                    Turmas
+                INNER JOIN 
+                    disciplina ON turmas.disciplina_id = disciplina.id
+                WHERE 
+                    turmas.professor_id = ?
+            """;
+        PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL);
+        preparedStatement.setInt(1, professorId);
+        ResultSet resultado = preparedStatement.executeQuery();
+            // Executando a consul
+            
+            // Processando os resultados
+            while (resultado.next()) {
+                Turmas turma = new Turmas();
+                Disciplina disciplina = new Disciplina();
+                turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
+
+                disciplina.setNome(resultado.getString("NOME_DISCIPLINA"));
+                
+                turma.setDisciplina(disciplina);
+
+                turmas.add(turma);
+                
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conexao.closeConexao();
+        }
+        return turmas;
+    }
+    
+    public Map<String, List<Turmas>> buscaTurmasAgrupadasPorCodigo(int professorId) {
+        Map<String, List<Turmas>> turmasAgrupadas = new HashMap<>();
+        Conexao conexao = new Conexao();
+
+        try {
+            // SQL para buscar turmas, incluindo o ID de aluno e disciplina
+            String selectSQL = """
+                SELECT
+                    turmas.id,
+                    turmas.codigo_turma,
+                    turmas.aluno_id,
+                    turmas.disciplina_id,
+                    alunos.nome AS nome_aluno,
+                    disciplina.nome AS nome_disciplina,
+                    turmas.nota
+                FROM
+                    turmas
+                INNER JOIN
+                    disciplina ON turmas.disciplina_id = disciplina.id
+                INNER JOIN
+                    alunos ON turmas.aluno_id = alunos.id
+                WHERE
+                    turmas.professor_id = ?
+                ORDER BY
+                    turmas.codigo_turma
+            """;
+
+            PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL);
+            preparedStatement.setInt(1, professorId);
+            ResultSet resultado = preparedStatement.executeQuery();
+
+            while (resultado.next()) {
+                Turmas turma = new Turmas();
+                Aluno aluno = new Aluno();
+                Disciplina disciplina = new Disciplina();
+
+                turma.setId(resultado.getInt("id"));
+                turma.setCodigo_turma(resultado.getString("codigo_turma"));
+                turma.setNota(resultado.getFloat("nota"));
+
+                // Coletando os IDs
+                int alunoId = resultado.getInt("aluno_id");
+                int disciplinaId = resultado.getInt("disciplina_id");
+
+                aluno.setId(alunoId);
+                aluno.setNome(resultado.getString("nome_aluno"));
+
+                disciplina.setId(disciplinaId);
+                disciplina.setNome(resultado.getString("nome_disciplina"));
+
+                turma.setAluno(aluno);
+                turma.setDisciplina(disciplina);
+
+                // Agrupar pelo código da turma
+                turmasAgrupadas
+                    .computeIfAbsent(turma.getCodigo_turma(), k -> new ArrayList<>())
+                    .add(turma);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar turmas agrupadas: " + e.getMessage(), e);
+        } finally {
+            conexao.closeConexao();
+        }
+        return turmasAgrupadas;
+    }
+
+    
+     public void adicionarNota(int alunoId, int disciplinaId, int professorId, String codigoTurma, float nota) {   
+        Conexao conexao = new Conexao();
+        try {
+            String sql = "INSERT INTO turmas (aluno_id, disciplina_id, professor_id, codigo_turma, nota) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
+            stmt.setInt(1, alunoId);
+            stmt.setInt(2, disciplinaId);
+            stmt.setInt(3,professorId);
+            stmt.setString(4, codigoTurma);
+            stmt.setFloat(5, nota);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+        throw new RuntimeException("Erro ao adicionar nota: " + e.getMessage(), e);
+        } finally {
+        conexao.closeConexao();
+        }
+    }
+     
+    public void editarNota(int idTurma, float nota) {
+        String sql = "UPDATE turmas SET nota = ? WHERE id = ?";
+        Conexao conexao = new Conexao();
+        try (PreparedStatement stmt = conexao.getConexao().prepareStatement(sql)) {
+            stmt.setFloat(1, nota);
+            stmt.setInt(2, idTurma);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao editar nota: " + e.getMessage(), e);
+        } finally {
+        conexao.closeConexao(); 
+        }
     }
 
     
