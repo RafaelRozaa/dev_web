@@ -79,7 +79,7 @@
                         <!-- Nota -->
                         <div class="mb-3">
                             <label for="nota" class="form-label">Nota</label>
-                            <input type="number" name="nota" id="nota" required min="0" max="10" step="0.1"
+                            <input type="number" name="nota" id="nota" required min="0" max="10" step="1.0"
                                    class="form-control"
                                    value=<%= "excluir".equals(action) || "alterar".equals(action) ? turma.getNota() : ""%>
                                    <%= "excluir".equals(action) ? "readonly" : ""%>>

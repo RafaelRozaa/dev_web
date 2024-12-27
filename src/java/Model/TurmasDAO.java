@@ -217,50 +217,7 @@ public class TurmasDAO {
         return turmas;
     }
     
-    public ArrayList<Turmas> buscaTurmasPorProfessor(int professorId) {
-        ArrayList<Turmas> turmas = new ArrayList<>();
-        Conexao conexao = new Conexao();
-        
-        try {
-            String selectSQL = """
-                SELECT
-                    turmas.codigo_turma,  
-                    disciplina.nome as nome_disciplina 
-                FROM 
-                    Turmas
-                INNER JOIN 
-                    disciplina ON turmas.disciplina_id = disciplina.id
-                WHERE 
-                    turmas.professor_id = ?
-            """;
-        PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL);
-        preparedStatement.setInt(1, professorId);
-        ResultSet resultado = preparedStatement.executeQuery();
-            // Executando a consul
-            
-            // Processando os resultados
-            while (resultado.next()) {
-                Turmas turma = new Turmas();
-                Disciplina disciplina = new Disciplina();
-                turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
-
-                disciplina.setNome(resultado.getString("NOME_DISCIPLINA"));
-                
-                turma.setDisciplina(disciplina);
-
-                turmas.add(turma);
-                
-            }
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            conexao.closeConexao();
-        }
-        return turmas;
-    }
-    
-    public Map<String, List<Turmas>> buscaTurmasAgrupadasPorCodigo(int professorId) {
+    public Map<String, List<Turmas>> turmasAgrupadasPorCodigo(int professorId) {
         Map<String, List<Turmas>> turmasAgrupadas = new HashMap<>();
         Conexao conexao = new Conexao();
 
@@ -299,6 +256,7 @@ public class TurmasDAO {
                 turma.setId(resultado.getInt("id"));
                 turma.setCodigo_turma(resultado.getString("codigo_turma"));
                 turma.setNota(resultado.getFloat("nota"));
+                
 
                 // Coletando os IDs
                 int alunoId = resultado.getInt("aluno_id");
@@ -308,7 +266,7 @@ public class TurmasDAO {
                 aluno.setNome(resultado.getString("nome_aluno"));
 
                 disciplina.setId(disciplinaId);
-                disciplina.setNome(resultado.getString("nome_disciplina"));
+                disciplina.setNome(resultado.getString("nome_disciplina"));              
 
                 turma.setAluno(aluno);
                 turma.setDisciplina(disciplina);
@@ -324,25 +282,6 @@ public class TurmasDAO {
             conexao.closeConexao();
         }
         return turmasAgrupadas;
-    }
-
-    
-     public void adicionarNota(int alunoId, int disciplinaId, int professorId, String codigoTurma, float nota) {   
-        Conexao conexao = new Conexao();
-        try {
-            String sql = "INSERT INTO turmas (aluno_id, disciplina_id, professor_id, codigo_turma, nota) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conexao.getConexao().prepareStatement(sql);
-            stmt.setInt(1, alunoId);
-            stmt.setInt(2, disciplinaId);
-            stmt.setInt(3,professorId);
-            stmt.setString(4, codigoTurma);
-            stmt.setFloat(5, nota);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-        throw new RuntimeException("Erro ao adicionar nota: " + e.getMessage(), e);
-        } finally {
-        conexao.closeConexao();
-        }
     }
      
     public void editarNota(int idTurma, float nota) {

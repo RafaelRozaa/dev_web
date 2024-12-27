@@ -39,15 +39,12 @@
                                 aria-expanded="false" aria-controls="collapse-<%= codigoTurma %>">
                             Turma: <%= codigoTurma %>
                         </button>
-
-                        <!-- Botão Adicionar Nota -->
-                        <a href="ProfessorController?action=adicionarNota&codigoTurma=<%= codigoTurma %>&id=<%= profId %>" 
-                           class="btn btn-success btn-sm">
-                            Adicionar Nota
-                        </a>
                     </div>
                 </h2>
-                <div id="collapse-<%= codigoTurma %>" class="accordion-collapse collapse" aria-labelledby="heading-<%= codigoTurma %>" data-bs-parent="#accordionTurmas">
+                <div id="collapse-<%= codigoTurma %>" 
+                     class="accordion-collapse collapse" 
+                     aria-labelledby="heading-<%= codigoTurma %>" 
+                     data-bs-parent="#accordionTurmas">
                     <div class="accordion-body">
                         <table class="table table-striped">
                             <thead>
@@ -67,7 +64,11 @@
                                     <td><%= turma.getNota() %></td>
                                     <td><%= turma.getDisciplina().getNome() %></td>
                                     <td>
-                                    <a href="ProfessorController?action=editarNota&turmaId=<%= turma.getId()%>&codigoTurma=<%= codigoTurma %>&nota=<%= turma.getNota() %>&id=<%=profId%>" class="btn btn-primary btn-sm">Editar Nota</a>                                    </td>
+                                        <a href="ProfessorController?action=editarNota&turmaId=<%= turma.getId()%>"
+                                           class="btn btn-primary btn-sm">
+                                            Editar Nota
+                                        </a>
+                                    </td>
                                 </tr>
                                 <%
                                     }
