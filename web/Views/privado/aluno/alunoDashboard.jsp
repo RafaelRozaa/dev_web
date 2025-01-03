@@ -1,45 +1,84 @@
+<%@page import="Entidade.Professor"%>
+<%@page import="Model.TurmasDAO"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="Entidade.Turmas"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="Entidade.Aluno"%>
 <!DOCTYPE html>
 <html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aluno - Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="http://localhost:8080/Escola/Views/bootstrap/bootstrap.min.css">
-</head>
-<body>
-    <jsp:include page="/Views/comum/menu.jsp" />
+    <head>
+        <title>Seleção de Turmas</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="http://localhost:8080/Escola/Views/bootstrap/bootstrap.min.css">
+        <script src="http://localhost:8080/Escola/Views/bootstrap/bootstrap.bundle.min.js"></script>
+    </head>
+    <body>
+        <jsp:include page="/Views/comum/menu.jsp" />
 
-    <!-- Seção de Cards -->
-    <section class="container mt-4">
-        <h2 class="text-center mb-4">Dashboard do Aluno</h2>
-        <div class="row justify-content-center">
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm" style="min-height: 166px;">
-                    <div class="card-body d-flex flex-column justify-content-center text-center">
-                        <h5 class="card-title">Inscrição</h5>
-                        <p class="card-text">Consulte disciplinas e turmas abertas para inscrição</p>
-                        <a href="#" class="btn btn-primary align-self-center">Entrar</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm" style="min-height: 166px;">
-                    <div class="card-body d-flex flex-column justify-content-center text-center">
-                        <h5 class="card-title">Histórico de notas</h5>
-                        <p class="card-text">Consulte seu histórico de notas</p>
-                        <a href="#" class="btn btn-primary align-self-center">Entrar</a>
-                    </div>
-                </div>
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Turmas disponíveis para inscrição</h2>
+            <div class="accordion" id="accordionTurmas">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>                                   
+                            <th>Turma</th>
+                            <th>Disciplina</th>
+                            <th>Professor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%                
+                            int alunoId = (Integer) request.getAttribute("id");
+                            Map<String, List<Turmas>> turmasAgrupadas = (Map<String, List<Turmas>>) request.getAttribute("turmasAgrupadas");
+                            List<Turmas> turmasPorAluno = (List<Turmas>) request.getAttribute("turmasPorAluno");
+                            for (Map.Entry<String, List<Turmas>> entry : turmasAgrupadas.entrySet()) {
+                                String codigoTurma = entry.getKey();
+                                List<Turmas> turmas = entry.getValue();
+                                Turmas turma = turmas.get(0);
+                        %>
+                        <tr>
+                            <td><%= turma.getCodigo_turma()%></td>
+                            <td><%= turma.getDisciplina().getNome()%></td>
+                            <td><%= turma.getProfessor().getNome()%></td>             
+                            <td>
+                                <a href="AlunoController?action=inscrever&codTurma=<%= turma.getCodigo_turma()%>&aluno=<%= alunoId%>&disciplina=<%= turma.getDisciplina().getId()%>&professor=<%= turma.getProfessor().getId()%>"
+                                   class="btn btn-primary btn-sm">
+                                    Inscreva-se
+                                </a>
+                            </td>
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </tbody>
+                </table>
+                <h2 class="text-center mb-4 mt-4">Turmas em que está inscrito</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>                                   
+                            <th>Turma</th>
+                            <th>Disciplina</th>
+                            <th>Professor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%
+                            for (Turmas turma : turmasPorAluno) {
+                        %>
+                        <tr>
+                            <td><%= turma.getCodigo_turma()%></td>
+                            <td><%= turma.getDisciplina().getNome()%></td>
+                            <td><%= turma.getProfessor().getNome()%></td>             
+                        </tr>
+                        <%
+                            }
+                        %>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section>
-
-
-    <!-- Bootstrap JS -->
-    <script src="http://localhost:8080/Escola/Views/bootstrap/bootstrap.bundle.min.js"></script>
+    </div>
 </body>
 </html>

@@ -2,6 +2,11 @@ package Controller.privado;
 
 import Entidade.Aluno;
 import Model.AlunoDAO;
+import Model.TurmasDAO;
+import Entidade.Turmas;
+import Entidade.Aluno;
+import Entidade.Disciplina;
+import Entidade.Professor;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +24,7 @@ public class AlunoController extends HttpServlet {
         String action = request.getParameter("action");
         RequestDispatcher rd;
         AlunoDAO dao = new AlunoDAO();
-
+        TurmasDAO turmaDao = new TurmasDAO();
         try {
             switch (action) {
                 case "listar":
@@ -45,6 +50,34 @@ public class AlunoController extends HttpServlet {
                 case "incluir":
                     request.setAttribute("action", action);
                     rd = request.getRequestDispatcher("/Views/privado/admin/forms/formAluno.jsp");
+                    rd.forward(request, response);
+                    break;
+                case "dashboard":
+                    int alunoId = Integer.parseInt(request.getParameter("id"));
+                    request.setAttribute("turmasAgrupadas", turmaDao.turmasAgrupadas(alunoId));
+                    request.setAttribute("turmasPorAluno", turmaDao.turmasPorAluno(alunoId));
+                    request.setAttribute("id",alunoId);
+                    rd = request.getRequestDispatcher("/Views/privado/aluno/alunoDashboard.jsp");
+                    rd.forward(request, response);
+                    break;
+                case "inscrever":
+                    Turmas turma = new Turmas();
+                    Aluno aluno = new Aluno();
+                    Professor professor = new Professor();
+                    Disciplina disciplina = new Disciplina();
+                    disciplina.setId(Integer.parseInt(request.getParameter("disciplina")));
+                    professor.setId(Integer.parseInt(request.getParameter("professor")));
+                    aluno.setId(Integer.parseInt(request.getParameter("aluno")));
+                    turma.setCodigo_turma(request.getParameter("codTurma"));
+                    turma.setAluno(aluno);
+                    turma.setDisciplina(disciplina);
+                    turma.setProfessor(professor);
+                    turma.setNota(Float.parseFloat("0"));
+                    turmaDao.Inserir(turma);
+                    request.setAttribute("msgOperacaoRealizada", "Inscrição realizada com sucesso");
+                    
+                    request.setAttribute("link", "AlunoController?action=dashboard&id=" + Integer.parseInt(request.getParameter("aluno")));
+                    rd = request.getRequestDispatcher("/Views/comum/showMessage.jsp");
                     rd.forward(request, response);
                     break;
                 default:
