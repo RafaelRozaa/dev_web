@@ -217,6 +217,74 @@ public class TurmasDAO {
         return turmas;
     }
     
+       public ArrayList<Turmas> turmasPorAluno(int idAluno) {
+        ArrayList<Turmas> turmas = new ArrayList<>();
+        Conexao conexao = new Conexao();
+        try {
+            String selectSQL = """
+                SELECT 
+                    turmas.id, 
+                    turmas.professor_id, 
+                    turmas.disciplina_id, 
+                    turmas.aluno_id, 
+                    turmas.codigo_turma, 
+                    turmas.nota, 
+                    alunos.nome as nome_aluno, 
+                    disciplina.nome as nome_disciplina, 
+                    professores.nome as nome_professor
+                FROM 
+                    Turmas
+                JOIN 
+                    alunos ON turmas.aluno_id = alunos.id
+                JOIN 
+                    professores ON turmas.professor_id = professores.id
+                JOIN 
+                    disciplina ON turmas.disciplina_id = disciplina.id
+                WHERE 
+                    turmas.aluno_id= ?
+                ORDER BY 
+                    turmas.codigo_turma
+            """;
+            PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL);
+            preparedStatement.setInt(1, idAluno); // Definir o parâmetro de filtro
+            ResultSet resultado = preparedStatement.executeQuery();
+
+            while (resultado.next()) {
+                Turmas turma = new Turmas();
+                Aluno aluno = new Aluno();
+                Disciplina disciplina = new Disciplina();
+                Professor professor = new Professor();
+
+                // Preencher os dados da turma e entidades relacionadas
+                turma.setId(resultado.getInt("ID"));
+                turma.setCodigo_turma(resultado.getString("CODIGO_TURMA"));
+                turma.setNota(resultado.getFloat("NOTA"));
+
+                aluno.setId(resultado.getInt("ALUNO_ID"));
+                aluno.setNome(resultado.getString("NOME_ALUNO"));
+
+                disciplina.setId(resultado.getInt("DISCIPLINA_ID"));
+                disciplina.setNome(resultado.getString("NOME_DISCIPLINA"));
+
+                professor.setId(resultado.getInt("PROFESSOR_ID"));
+                professor.setNome(resultado.getString("NOME_PROFESSOR"));
+
+                // Configurar os relacionamentos
+                turma.setAluno(aluno);
+                turma.setDisciplina(disciplina);
+                turma.setProfessor(professor);
+
+                // Adicionar à lista
+                turmas.add(turma);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar turmas por Aluno: " + e.getMessage(), e);
+        } finally {
+            conexao.closeConexao();
+        }
+        return turmas;
+    }
+    
     public Map<String, List<Turmas>> turmasAgrupadasPorCodigo(int professorId) {
         Map<String, List<Turmas>> turmasAgrupadas = new HashMap<>();
         Conexao conexao = new Conexao();
@@ -276,6 +344,117 @@ public class TurmasDAO {
                     .computeIfAbsent(turma.getCodigo_turma(), k -> new ArrayList<>())
                     .add(turma);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar turmas agrupadas: " + e.getMessage(), e);
+        } finally {
+            conexao.closeConexao();
+        }
+        return turmasAgrupadas;
+    }
+    
+    public Map<String, List<Turmas>> turmasAgrupadas(int alunoId) {
+        Map<String, List<Turmas>> turmasAgrupadas = new HashMap<>();
+        Map<String, List<Turmas>> turmasAgrupadasAluno = new HashMap<>();
+        Conexao conexao = new Conexao();
+
+        try {
+            // SQL para buscar turmas, incluindo o ID de aluno e disciplina
+            String selectSQL1 = """
+                SELECT
+                    turmas.id,
+                    turmas.codigo_turma,
+                    turmas.aluno_id,
+                    turmas.disciplina_id,
+                    disciplina.nome AS nome_disciplina,
+                    professores.id AS professor_id,
+                    professores.nome AS nome_professor,
+                    turmas.nota
+                FROM
+                    turmas
+                INNER JOIN
+                    disciplina ON turmas.disciplina_id = disciplina.id
+                INNER JOIN
+                    professores on turmas.professor_id = professores.id
+                ORDER BY
+                    turmas.codigo_turma
+            """;
+            
+            String selectSQL2 = """
+                SELECT
+                    turmas.id,
+                    turmas.codigo_turma,
+                    turmas.aluno_id,
+                    turmas.disciplina_id,
+                    disciplina.nome AS nome_disciplina,
+                    professores.id AS professor_id,
+                    professores.nome AS nome_professor,
+                    turmas.nota
+                FROM
+                    turmas
+                INNER JOIN
+                    disciplina ON turmas.disciplina_id = disciplina.id
+                INNER JOIN
+                    professores on turmas.professor_id = professores.id
+                WHERE 
+                    turmas.aluno_id = ?;
+            """;
+
+            PreparedStatement preparedStatement = conexao.getConexao().prepareStatement(selectSQL1);
+            ResultSet resultado = preparedStatement.executeQuery();
+            
+            while (resultado.next()) {
+                Turmas turma = new Turmas();
+                Disciplina disciplina = new Disciplina();
+                Professor professor = new Professor();
+                
+                turma.setId(resultado.getInt("id"));
+                turma.setCodigo_turma(resultado.getString("codigo_turma"));
+                turma.setNota(resultado.getFloat("nota"));
+                
+                // Coletando os IDs
+                disciplina.setId(resultado.getInt("disciplina_id"));
+                disciplina.setNome(resultado.getString("nome_disciplina"));              
+                professor.setNome(resultado.getString("nome_professor"));
+                professor.setId(resultado.getInt("professor_id"));
+                
+                turma.setProfessor(professor);
+                turma.setDisciplina(disciplina);
+
+                // Agrupar pelo código da turma
+                turmasAgrupadas
+                    .computeIfAbsent(turma.getCodigo_turma(), k -> new ArrayList<>())
+                    .add(turma);
+            }
+            
+            preparedStatement = conexao.getConexao().prepareStatement(selectSQL2);
+            preparedStatement.setInt(1, alunoId);
+            ResultSet resultado2 = preparedStatement.executeQuery();
+            
+            while (resultado2.next()) {
+                Turmas turma = new Turmas();
+                Disciplina disciplina = new Disciplina();
+                Professor professor = new Professor();
+                
+                turma.setId(resultado2.getInt("id"));
+                turma.setCodigo_turma(resultado2.getString("codigo_turma"));
+                turma.setNota(resultado2.getFloat("nota"));
+                
+                // Coletando os IDs
+                disciplina.setId(resultado2.getInt("disciplina_id"));
+                disciplina.setNome(resultado2.getString("nome_disciplina"));              
+                professor.setNome(resultado2.getString("nome_professor"));
+                professor.setId(resultado2.getInt("professor_id"));
+                
+                turma.setProfessor(professor);
+                turma.setDisciplina(disciplina);
+
+                // Agrupar pelo código da turma
+                turmasAgrupadasAluno
+                    .computeIfAbsent(turma.getCodigo_turma(), k -> new ArrayList<>())
+                    .add(turma);
+            }
+            
+            turmasAgrupadas.keySet().removeAll(turmasAgrupadasAluno.keySet());
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar turmas agrupadas: " + e.getMessage(), e);
         } finally {

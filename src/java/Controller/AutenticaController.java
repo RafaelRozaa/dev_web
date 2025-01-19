@@ -85,12 +85,12 @@ public class AutenticaController extends HttpServlet {
                         HttpSession session = request.getSession();
                         session.setAttribute("usuario", alunoObtido);
                         session.setAttribute("usuarioTipo", "aluno");
-                        rd = request.getRequestDispatcher("/Views/privado/aluno/alunoDashboard.jsp");
+                        response.sendRedirect("privado/AlunoController?action=dashboard&id=" + alunoObtido.getId());
                     } else {
                         request.setAttribute("msgError", "CPF e/ou senha incorreto");
                         rd = request.getRequestDispatcher("/Views/autenticacao/formLogin.jsp");
+                        rd.forward(request, response);
                     }
-                    rd.forward(request, response);
                 }
                 case "prof" -> {
                     Professor profObtido = new Professor();
